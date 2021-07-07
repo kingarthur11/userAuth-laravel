@@ -1,0 +1,37 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My First API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/projects": {
+            "get": {
+                "operationId": "7c0d639691bc6619cca0ca13afb094eb",
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of projects."
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        {
+            "passport": {
+                "type": "oauth2",
+                "description": "Laravel passport oauth2 security.",
+                "in": "header",
+                "scheme": "https",
+                "flows": {
+                    "password": {
+                        "authorizationUrl": "http://auth-laravel.test/oauth/authorize",
+                        "tokenUrl": "http://auth-laravel.test/oauth/token",
+                        "refreshUrl": "http://auth-laravel.test/token/refresh",
+                        "scopes": []
+                    }
+                }
+            }
+        }
+    ]
+}

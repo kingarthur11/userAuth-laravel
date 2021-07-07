@@ -10,6 +10,12 @@ use App\Http\Resources\Product as ProductResource;
 
 class ProductController extends BaseController
 {
+    /**
+     * @OA\Get(
+     *     path="/projects",
+     *     @OA\Response(response="200", description="Display a listing of projects.")
+     * )
+     */
     public function index()
     {
         $products = Product::all();
