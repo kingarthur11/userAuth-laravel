@@ -8,14 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class Diary extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'title',
+        'body',
+    ];
+
+    protected $appends = ['name'];
 
     public function user()
     {
     	return $this->belongsTo(User::class);
     }
 
-    protected $fillable = [
-        'title',
-        'body',
-    ];
+
+
+    public function getNameAttribute(){
+        $name = $this->user->name;
+        return $name;
+    }
 }
