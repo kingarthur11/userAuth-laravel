@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
+use App\Models\Diary;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 
@@ -45,5 +46,30 @@ class RegisterController extends BaseController
         else{
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         }
+    }
+    public function index()
+    {
+        $user = User::all();
+        return response()->json(['message'=>'Success','data'=>$user],200);
+
+    }
+    public function show(User $user)
+    {
+        return response()->json(['message'=>'Success','data'=>$user],200);
+    }
+    public function show_diaries(User $user)
+    {
+        $diaries = $user->diaries;
+        if(count($diaries) > 0){
+            return response()->json(['message'=>'Success','data'=>$diaries],200);
+        }
+            return response()->json(['message'=>'No diary Found','data'=>null],200);
+    }
+    public function destroy(User $user)
+    {
+        if($user->delete()){
+            return response()->json(['message'=>'Diary Deleted','data'=>null],200);
+        }
+        return response()->json(['message'=>'Error Occured','data'=>null],400);
     }
 }
