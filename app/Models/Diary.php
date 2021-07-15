@@ -13,18 +13,14 @@ class Diary extends Model
         'title',
         'body',
     ];
+    // protected $appends = ['name'];
+    // public function user()
+    // {
+    // 	return $this->belongsTo(User::class);
+    // }
 
-    protected $appends = ['name'];
-
-    public function user()
-    {
-    	return $this->belongsTo(User::class);
-    }
-
-
-
-    public function getNameAttribute(){
-        $name = $this->user->name;
-        return $name;
-    }
+    // public function getNameAttribute(){
+    //     $name = $this->user->name;
+    //     return $name;
+    // }
 }

@@ -18,9 +18,7 @@ class DiaryController extends BaseController
     public function index()
     {
         $diaries = Diary::all();
-        // $users = $diaries->user;
         return response()->json(['message'=>'Diary retrieved successfully.','data'=>$diaries],200);
-        // return $this->sendResponse(DiaryResource::collection($diaries), 'Diary retrieved successfully.');
     }
     /**
      * Show the form for creating a new resource.
@@ -40,23 +38,12 @@ class DiaryController extends BaseController
      */
     public function store(Request $request)
     {
-        // $validator = $this->validateDiary();
-        // if($validator->fails()){
-        //     return response()->json(['message'=>$validator->messages(),'data'=>null],400);
-        // }
-
-        // $diary = new Diary($validator->validate());
-        // if($user->diaries()->save($diary)){
-        //     return $this->sendResponse(new DiaryResource($diary), 'Diary created successfully.');
-        // }
-
         $diary = Diary::create([
             'user_id' => $request->user_id,
             'title' => $request->title,
             'body' => $request->body
         ]);
         return response()->json(['message'=>'Success','data'=>$diary],200);
-        // return response()->json(['message'=>'Error Occured','data'=>null],400);
     }
     /**
      * Display the specified resource.
@@ -67,17 +54,14 @@ class DiaryController extends BaseController
     public function show($id)
     {
         $diary = Diary::find($id);
-
         if (is_null($diary)) {
             return $this->sendError('Diary not found.');
         }
         return response()->json(['message'=>'Diary retrieved successfully.','data'=>$diary],200);
-        // return $this->sendResponse(new DiaryResource($diary), 'Diary retrieved successfully.');
     }
     public function show_all(Diary $diary)
     {
-        // $diary = Diary::all();
-        // return $this->sendResponse(new DiaryResource($diary), 'Diary retrieved successfully.');
+        //
     }
     /**
      * Show the form for editing the specified resource.
