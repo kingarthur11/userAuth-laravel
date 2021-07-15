@@ -11,6 +11,13 @@ class Transactions extends Model
     protected $fillable = [
         'amount',
         'transaction_type',
-        'status'
+        'status',
+        'wallet_id'
     ];
+
+    public function wallet()
+    {
+        return $this->belongsTo('App\Wallet');
+    }
+
 }
