@@ -7,6 +7,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use App\Models\Diary;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Wallet;
 use Validator;
 
 class RegisterController extends BaseController
@@ -30,6 +31,14 @@ class RegisterController extends BaseController
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')->accessToken;
         $success['name'] =  $user->name;
+
+        $wallet = Wallet::create([
+            'user_id' => $user->id,
+            'balance' => 20,
+            'debit' => 0,
+            'credit' => 0,
+        ]);
+
         return response()->json(['message'=>'Success','data'=>$user],200);
         // return $this->sendResponse($success, 'User register successfully.');
     }

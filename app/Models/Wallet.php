@@ -24,5 +24,4 @@ class Wallet extends Model
     {
         return $this->hasMany('App\Transactions');
     }
-
 }
