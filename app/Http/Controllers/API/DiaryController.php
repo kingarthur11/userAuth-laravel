@@ -8,7 +8,7 @@ use App\Models\Diary;
 use Validator;
 use App\Http\Resources\Diary as DiaryResource;
 
-class DiaryController extends Controller
+class DiaryController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class DiaryController extends Controller
     public function index()
     {
         $diaries = Diary::all();
-        return $this->sendResponse(DiaryResource::collection($diaries), 'Diary retrieved successfully.');
+        return response()->json(['message'=>'Diary retrieved successfully.','data'=>$diaries],200);
     }
     /**
      * Show the form for creating a new resource.
@@ -36,19 +36,14 @@ class DiaryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, User $user)
+    public function store(Request $request)
     {
-        $validator = $this->validateDiary();
-        if($validator->fails()){
-            return response()->json(['message'=>$validator->messages(),'data'=>null],400);
-        }
-
-        $diary = new Diary($validator->validate());
-        if($user->diaries()->save($diary)){
-            return $this->sendResponse(new DiaryResource($diary), 'Diary created successfully.');
-        }
-
-        return response()->json(['message'=>'Error Occured','data'=>null],400);
+        $diary = Diary::create([
+            'user_id' => $request->user_id,
+            'title' => $request->title,
+            'body' => $request->body
+        ]);
+        return response()->json(['message'=>'Success','data'=>$diary],200);
     }
     /**
      * Display the specified resource.
@@ -62,12 +57,11 @@ class DiaryController extends Controller
         if (is_null($diary)) {
             return $this->sendError('Diary not found.');
         }
-
-        return $this->sendResponse(new DiaryResource($diary), 'Diary retrieved successfully.');
+        return response()->json(['message'=>'Diary retrieved successfully.','data'=>$diary],200);
     }
     public function show_all(Diary $diary)
     {
-        return $this->sendResponse(new DiaryResource($diary), 'Diary retrieved successfully.');
+        //
     }
     /**
      * Show the form for editing the specified resource.
@@ -89,7 +83,11 @@ class DiaryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $diary = Diary::find($id);
+        $diary->user_id =  $request->get('user_id');
+        $diary->title = $request->get('title');
+        $diary->body = $request->get('body');
+        $contact->save();
     }
 
     /**
@@ -100,6 +98,7 @@ class DiaryController extends Controller
      */
     public function destroy($id)
     {
+        $diary = Diary::find($id);
         if($diary->delete()){
             return response()->json(['message'=>'Diary Deleted','data'=>null],200);
         }
