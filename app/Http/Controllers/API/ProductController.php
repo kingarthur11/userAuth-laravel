@@ -6,26 +6,22 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Product;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Product as ProductResource;
 
 class ProductController extends BaseController
 {
-    /**
-     * @OA\Get(
-     *     path="/projects",
-     *     @OA\Response(response="200", description="Display a listing of projects.")
-     * )
-     */
+
     public function index()
     {
         $products = Product::all();
-        return $this->sendResponse(ProductResource::collection($products), 'Products retrieved successfully.');
+        return $this->sendResponse( $products, 'Products retrieved successfully.');
+
     }
 
     public function store(Request $request)
     {
         $input = $request->all();
-
         $validator = Validator::make($input, [
             'name' => 'required',
             'detail' => 'required'
@@ -36,45 +32,31 @@ class ProductController extends BaseController
         }
 
         $product = Product::create($input);
+        return $this->sendResponse( $product, 'Product created successfully');
 
-        return $this->sendResponse(new ProductResource($product), 'Product created successfully.');
     }
 
     public function show($id)
     {
         $product = Product::find($id);
-
         if (is_null($product)) {
             return $this->sendError('Product not found.');
         }
+        return $this->sendResponse( $product, 'Product created successfully');
 
-        return $this->sendResponse(new ProductResource($product), 'Product retrieved successfully.');
     }
 
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        $input = $request->all();
-
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'detail' => 'required'
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
-
-        $product->name = $input['name'];
-        $product->detail = $input['detail'];
-        $product->save();
-
-        return $this->sendResponse(new ProductResource($product), 'Product updated successfully.');
+        $product = Product::find($id);
+        $product->update($request->all());
+        return $this->sendResponse( $product, 'Product updated successfully');
     }
 
-    public function destroy(Product $product)
+    public function destroy($id)
     {
+        $product = Product::find($id);
         $product->delete();
-
         return $this->sendResponse([], 'Product deleted successfully.');
     }
 }
