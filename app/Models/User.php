@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_type'
     ];
 
     /**
@@ -43,11 +44,42 @@ class User extends Authenticatable
     ];
 
     public function diaries(){
-        return $this->hasMany(Diary::class);
+        return $this->hasMany('App\Models\Diary');
 
     }
-    public function wallet()
+    public function wallets()
     {
-        return $this->hasOne('App\Wallet');
+        return $this->hasOne('App\Models\Wallet');
     }
+    public function authorizeRoles($roles)
+    {
+      if ($this->hasAnyRole($roles)) {
+        return true;
+      }
+      abort(401, 'This action is unauthorized.');
+    }
+
+    // public function hasAnyRole($roles)
+    // {
+    //   if (is_array($roles)) {
+    //     foreach ($roles as $role) {
+    //       if ($this->hasRole($role)) {
+    //         return true;
+    //       }
+    //     }
+    //   } else {
+    //     if ($this->hasRole($roles))
+    //     return true;
+    //     }
+    // }
+    // return false;
+    // }
+
+    // public function hasRole($role)
+    // {
+    // if ($this->roles()->where(‘name’, $role)->first()) {
+    //     return true;
+    // }
+    // return false;
+    // }
 }

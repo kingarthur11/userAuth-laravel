@@ -18,6 +18,7 @@ class RegisterController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email',
+            'role_type' => 'required',
             'password' => 'required',
             'c_password' => 'required|same:password',
         ]);
@@ -38,9 +39,7 @@ class RegisterController extends BaseController
             'debit' => 0,
             'credit' => 0,
         ]);
-
-        return response()->json(['message'=>'Success','data'=>$user],200);
-        // return $this->sendResponse($success, 'User register successfully.');
+        return $this->sendResponse( $user, 'User register successfully.');
     }
 
     public function login(Request $request)
@@ -56,27 +55,5 @@ class RegisterController extends BaseController
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         }
     }
-    public function index()
-    {
-        $user = User::all();
-        return response()->json(['message'=>'Success','data'=>$user],200);
 
-    }
-    public function show($id)
-    {
-        $user = User::find($id);
-        if (is_null($user)) {
-            return $this->sendError('User not found.');
-        }
-        return response()->json(['message'=>'User retrieved successfully.','data'=>$user],200);
-    }
-
-    public function destroy($id)
-    {
-        $user = User::find($id);
-        if($user->delete()){
-            return response()->json(['message'=>'User Deleted','data'=>null],200);
-        }
-        return response()->json(['message'=>'Error Occured','data'=>null],400);
-    }
 }
